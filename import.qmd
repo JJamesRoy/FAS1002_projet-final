@@ -27,8 +27,7 @@ bibliography: references.bib
 
 ## Quelles sont les bases de données utilisées dans ce travail ?
 
-Ce travail utilise les données de [Gapminder](https://www.gapminder.org/) et de [Our World in Data](https://ourworldindata.org/) (en particulier
-[CO₂ and Greenhouse Gas Emissions](https://github.com/owid/co2-data) et [Energy](https://ourworldindata.org/energy)).
+Ce travail utilise les données de [Gapminder](https://www.gapminder.org/) et de [Our World in Data](https://ourworldindata.org/) (en particulier [CO₂ and Greenhouse Gas Emissions](https://github.com/owid/co2-data) et [Energy](https://ourworldindata.org/energy)).
 
 ## Importation des données
 
@@ -37,6 +36,7 @@ library(lubridate)
 library(fs)
 library(googlesheets4)
 library(taskscheduleR)
+library(skimr)
 ```
 
 ```{r energy}
@@ -44,52 +44,56 @@ URL_energy = "https://nyc3.digitaloceanspaces.com/owid-public/data/energy/owid-e
 
 base_path = path("data","raw")
 
-fname = paste("energy_",
+energy_name = paste("energy_",
               today(),
               ".csv",
                sep = "")
 
-fpath = path(base_path,
-             fname)
+energy_path = path(base_path,
+             energy_name)
 
-download.file(url = URL_energy, destfile = fpath)
+download.file(url = URL_energy, destfile = energy_path)
 ```
 
 ```{r co2}
 URL_co2 = "https://nyc3.digitaloceanspaces.com/owid-public/data/co2/owid-co2-data.csv"
 
-base_path = path("data","raw")
-
-fname = paste("co2_",
+co2_name = paste("co2_",
               today(),
               ".csv",
                sep = "")
 
-fpath = path(base_path,
-             fname)
+co2_path = path(base_path,
+             co2_name)
 
-download.file(url = URL_co2, destfile = fpath)
+download.file(url = URL_co2, destfile = co2_path)
 ```
 
 ```{r gapminder}
-#URL_life = "https://docs.google.com/spreadsheets/d/1RheSon1-q4vFc3AGyupVPH6ptEByE-VtnjOCselU0PE/edit#gid=501532268"
+URL_life = "https://docs.google.com/spreadsheets/d/1RheSon1-q4vFc3AGyupVPH6ptEByE-VtnjOCselU0PE/edit#gid=176703676"
 
-#sheet_add(URL_life)
+life_name = paste("life_expectancy_",
+              today(),
+              ".csv",
+               sep = "")
 
-#base_path = path("data","raw")
+life_path = path(base_path,
+             life_name)
 
-#fname = paste("life_expec_",
-             # today(),
-            #  ".csv",
-           #    sep = "")
+gs4_deauth()
 
-#fpath = path(base_path,
-           #  fname)
+life_expec = read_sheet(URL_life, sheet = 4)
 
-#download.file(url = URL_life, destfile = fpath)
+write.csv(life_expec, file = life_path)
 ```
 
 ## 
+
+Reimport.
+
+Créer un script dans le dossier R
+
+ggtable
 
 Il est maintenant le temps de décrire votre projet avant de passer au document suivant, soit l'importation et la manipulation des données.
 
