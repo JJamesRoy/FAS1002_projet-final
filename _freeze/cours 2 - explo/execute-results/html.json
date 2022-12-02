@@ -1,0 +1,14 @@
+{
+  "hash": "dd95f777f690fe85fc0517c4591c01b3",
+  "result": {
+    "markdown": "::: {.cell}\n\n:::\n\n\nReimport.\n\nCréer un script dans le dossier R\n\nggtable\n\n\n::: {.cell}\n\n```{.r .cell-code}\n#df = read_csv(file = \"data/raw/athlete_events.csv\")\n```\n:::\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}
