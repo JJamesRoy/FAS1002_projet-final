@@ -1,22 +1,22 @@
 ---
-title: "Titre de votre page d'importation"
+title: "Importation des données"
 title-block-banner: true
 description: | 
-  Petite description de cette page.
+  Explication de la démarche d'importation.
 # à changer
-date: "2022-12-21"
+date: `Sys.date`
 # Modifier les détails que vous voulez
 author:
-  - name: "Prénom Nom"
+  - name: "James Roy"
     # Votre site web perso ou github
-    url: https://github.com/VOTREUSERNAME
+    url: https://github.com/JJamesRoy
     # les champs d'affiliation sont optionnels, vous pouvez les
     # comment out en ajoutant un # devant.
     affiliation: FAS1002
     affiliation-url: https://FAS1002.github.io/A22
     # changer pour votre propre orcid id
     # https://orcid.org/ pour vous inscrire.
-    orcid: 0000-0000-0000-0000
+    orcid: 0000-0002-0941-5961
 
 # TRUE == Générer une citation pour cette page précise. Pour enlever, mettre false.
 citation: true
@@ -25,12 +25,75 @@ citation: true
 bibliography: references.bib
 ---
 
-Il est maintenant le temps de décrire votre projet avant de passer au document
-suivant, soit l'importation et la manipulation des données.
+## Quelles sont les bases de données utilisées dans ce travail ?
 
-Je vous conseille d'écrire cette partie en dernier, une fois que vous aurez
-déjà vos résultats et figures afin d'éviter de réécrire cette page plusieurs
-fois.
+Ce travail utilise les données de [Gapminder](https://www.gapminder.org/) et de [Our World in Data](https://ourworldindata.org/) (en particulier
+[CO₂ and Greenhouse Gas Emissions](https://github.com/owid/co2-data) et [Energy](https://ourworldindata.org/energy)).
+
+## Importation des données
+
+```{r lib}
+library(lubridate)
+library(fs)
+library(googlesheets4)
+library(taskscheduleR)
+```
+
+```{r energy}
+URL_energy = "https://nyc3.digitaloceanspaces.com/owid-public/data/energy/owid-energy-data.csv"
+
+base_path = path("data","raw")
+
+fname = paste("energy_",
+              today(),
+              ".csv",
+               sep = "")
+
+fpath = path(base_path,
+             fname)
+
+download.file(url = URL_energy, destfile = fpath)
+```
+
+```{r co2}
+URL_co2 = "https://nyc3.digitaloceanspaces.com/owid-public/data/co2/owid-co2-data.csv"
+
+base_path = path("data","raw")
+
+fname = paste("co2_",
+              today(),
+              ".csv",
+               sep = "")
+
+fpath = path(base_path,
+             fname)
+
+download.file(url = URL_co2, destfile = fpath)
+```
+
+```{r gapminder}
+URL_life = "https://docs.google.com/spreadsheets/d/1RheSon1-q4vFc3AGyupVPH6ptEByE-VtnjOCselU0PE/edit#gid=501532268"
+
+sheet_add(URL_life)
+
+base_path = path("data","raw")
+
+fname = paste("life_expec_",
+              today(),
+              ".csv",
+               sep = "")
+
+fpath = path(base_path,
+             fname)
+
+download.file(url = URL_life, destfile = fpath)
+```
+
+## 
+
+Il est maintenant le temps de décrire votre projet avant de passer au document suivant, soit l'importation et la manipulation des données.
+
+Je vous conseille d'écrire cette partie en dernier, une fois que vous aurez déjà vos résultats et figures afin d'éviter de réécrire cette page plusieurs fois.
 
 ::: callout-important
 N'oubliez pas d'inclure vos références sur chacune des pages!

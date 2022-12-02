@@ -1,0 +1,14 @@
+{
+  "hash": "419e1bfd021645a88312b7d80d0d3472",
+  "result": {
+    "markdown": "::: {.cell}\n\n:::\n\n::: {.cell hash='cours_cache/html/download_7a4f314a03c7d6c72ce478790f911158'}\n\n```{.r .cell-code}\nURL = \"https://github.com/FAS1002/A22/raw/main/assets/fichiers/olympic_archive.zip\"\n\nbase_path = path(\"data\",\"raw\")\n\nfname = paste(today(), \n               \"olymp-archive.zip\",\n               sep = \"_\")\n\nfpath = path(base_path,\n             fname)\n\ndownload.file(url = URL, destfile = fpath)\n```\n:::\n\n\nLe fichier est là : data/raw/2022-11-29_olymp-archive.zip\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}
