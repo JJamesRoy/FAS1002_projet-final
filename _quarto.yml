@@ -18,21 +18,23 @@ website:
 # Options à changer pour le menu ou la barre de navigation
   navbar:
     background: primary
-    logo: /assets/img/FAS1002.png 	# Logo image to be displayed left of the title.
-    logo-alt: Logo du cours FAS1002
+    logo: /assets/img/logo.png 	# Logo image to be displayed left of the title.
+    logo-alt: Logo
     # Alternate text for the logo image.
     search: true
     # menu
     left:
       - href: index.qmd
         text: Page d'accueil
-      - intro.qmd
+      - href : intro.qmd
+        text : Introduction
       - href: import.qmd
-        text: Titre à changer
-      - exploration.qmd
+        text: Importation des données
+      - href : Exploration des données
+        text : exploration.qmd
     right:
       - href: a-propos.qmd
-        text: Page à droite 
+        text: À propos 
 
 # footer
   page-footer:
@@ -40,8 +42,8 @@ website:
       [Propulsé par des logiciels libres 💖](https://github.com/FAS1002/A22){.nav-link}
     center:
     # Changer VOTRE NOM pour ce que vous voulez
-      - text: "VOTRE NOM"
-        href: mailto:VOTRECOURRIEL@example.com
+      - text: "James Roy"
+        href: mailto:james.roy@umontreal.ca
     right:
       - icon: github
         href: https://github.com/FAS1002/
@@ -49,7 +51,7 @@ website:
         
 
 # set favicon
-  favicon: /assets/img/FAS1002.png
+  favicon: /assets/img/logo.png
 format:
   html:
     theme:
