@@ -1,22 +1,22 @@
 ---
-title: "Titre de votre page d'exploration"
+title: "Exploration et analyse des données"
 title-block-banner: false
 description: | 
-  Petite description de cette page.
+  L'exploration et l'analyse des données se feront dans cette partie.
 # à changer
-date: "2022-12-21"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
 # Modifier les détails que vous voulez
 author:
-  - name: "Prénom Nom"
+  - name: "James Roy"
     # Votre site web perso ou github
-    url: https://github.com/VOTREUSERNAME
+    url: https://github.com/JJamesRoy
     # les champs d'affiliation sont optionnels, vous pouvez les
     # comment out en ajoutant un # devant.
     affiliation: FAS1002
     affiliation-url: https://FAS1002.github.io/A22
     # changer pour votre propre orcid id
     # https://orcid.org/ pour vous inscrire.
-    orcid: 0000-0000-0000-0000
+    orcid: 0000-0002-0941-5961
 
 # TRUE == Générer une citation pour cette page précise. Pour enlever, mettre false.
 citation: true
@@ -24,6 +24,66 @@ citation: true
 # ce fichier ou de connecter RStudio directement pour pouvoir citer avec @nom-de-reference.
 bibliography: references.bib
 ---
+
+## Exploration sommaire des données
+
+```{r message = FALSE, warning = FALSE}
+library(tidyverse)
+library(skimr)
+library(modelsummary)
+library(fs)
+```
+
+```{r import}
+base_cache = path("data","cache")
+
+files = list.files(base_cache)
+
+files_name = path(base_cache, files)
+
+df = lapply(files_name, read.csv)
+
+dat_co2 = df[[1]]
+dat_energy = df[[2]]
+dat_life = df[[3]]
+```
+
+### Données sur le CO2
+
+```{r}
+skim(dat_co2)
+```
+
+La base de donnée OWiD sur le CO2 est composée de 31 349 observations et de 74 variables. La plupart des variables sont numériques (sauf le nom des pays et son code ISO). Les autres variables ne concernent pas seulement le CO2, mais aussi le méthane, le protoxyde d'azote ou encore le PIB.
+
+```{r, warning = FALSE}
+dat_co2_summary = dat_co2 %>% 
+    filter(year == 1990 | year == 2000 | year == 2010) %>% 
+    select(c(co2, co2_per_capita, co2_per_gdp, energy_per_capita, continent)) %>%
+    drop_na() %>% 
+    rename(`Émission de CO2` = co2,
+           `Émission de CO2/hab.` = co2_per_capita,
+           `Émission de CO2/$PIB` = co2_per_gdp,
+           `Conso. d'énergie en kW/h par hab.` = energy_per_capita)
+
+datasummary(All(dat_co2_summary) ~ continent*((Moyenne = Mean) + (`Écart-type` = SD) + Min + Max + (Histogramme = Histogram)), data = dat_co2_summary)
+```
+
+### Données sur l'énergie
+
+```{r}
+skim(dat_energy)
+```
+
+La base de données sur l'énergie contient 10 215 observations pour un total de 128 variables. Pareillement à celle précédente, elle ne contient que 2 variables de type *character*, les autres sont des variables numériques. La base est très complète, elle contient des informations sur une panoplie de forme d'énergie.
+
+### Données sur l'espérance de vie
+
+```{r}
+skim(dat_life)
+```
+
+Concernant la base de données de Gapminder sur l'espérance de vie, celle-ci contient 56 616 observations et 4 variables. Elle est assez sobre, elle ne contient que l'année, le nom du pays, son code et son espérance de vie.
 
 ## Un peu d'interactivité pour le plaisir!
 
