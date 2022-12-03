@@ -35,7 +35,56 @@ Ce travail utilise les données de [Gapminder](https://www.gapminder.org/) et de
 
 Les données de Our World in Data sont mises à jour quotidiennement tandis que celles de Gapminder sont mis à jour mensuellement.
 
-## 
+## Nettoyage des données
+
+```{r, warning = FALSE, message=FALSE}
+library(fs)
+library(tidyverse)
+library(countrycode)
+```
+
+```{r import}
+base_path = path("data","raw")
+
+files = list.files(base_path)
+
+files_name = path(base_path, files)
+
+df = lapply(files_name, read.csv)
+
+dat_co2 = df[[1]]
+dat_energy = df[[2]]
+dat_life = df[[3]]
+```
+
+```{r co2}
+dat_co2 = dat_co2 %>% drop_na(co2) %>% 
+    mutate(continent = countrycode(iso_code, 'iso3c', 'continent')) %>%
+    mutate(continent = recode(continent, `Africa` = "Afrique", `Americas` = "Amériques", `Asia` = "Asie", `Oceania` = "Océanie"))
+```
+
+```{r energy}
+dat_energy = dat_energy %>% drop_na(energy_per_capita) %>% 
+    mutate(continent = countrycode(iso_code, 'iso3c', 'continent')) %>% 
+    mutate(continent = recode(continent, `Africa` = "Afrique", `Americas` = "Amériques", `Asia` = "Asie", `Oceania` = "Océanie"))
+```
+
+```{r life}
+dat_life = dat_life %>% select(-X) %>% 
+    mutate(continent = countrycode(geo, 'iso3c', 'continent')) %>% 
+    mutate(continent = recode(continent, `Africa` = "Afrique", `Americas` = "Amériques", `Asia` = "Asie", `Oceania` = "Océanie"))
+```
+
+```{r, message = FALSE}
+base_write = path("data","cache")
+
+
+myList <- list(dat_co2 = dat_co2, 
+               dat_energy = dat_energy,
+               dat_life = dat_life)
+
+mapply(write.csv, myList, file=paste0(base_write,"/",names(myList), '.csv'))
+```
 
 Reimport.
 
