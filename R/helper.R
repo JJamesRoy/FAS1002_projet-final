@@ -9,6 +9,7 @@ import_path = path(path,
                    import)
 
 taskscheduler_create(taskname = "import", rscript = import_path, 
-                     schedule = "DAILY", starttime = format(Sys.time() + 50, "%H:%M"))
+                     schedule = "DAILY", starttime = "2022-12-02")
 
 ########
+
