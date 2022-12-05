@@ -32,6 +32,7 @@ library(tidyverse)
 library(skimr)
 library(modelsummary)
 library(fs)
+library(stringr)
 ```
 
 ```{r import}
@@ -58,7 +59,7 @@ La base de donnée OWiD sur le CO2 est composée de 31 349 observations et de 74
 
 ```{r, warning = FALSE}
 dat_co2_summary = dat_co2 %>% 
-    filter(year == 1990 | year == 2000 | year == 2010) %>% 
+    filter(year >= 1990) %>% 
     select(c(co2, co2_per_capita, co2_per_gdp, energy_per_capita, continent)) %>%
     drop_na() %>% 
     rename(`Émission de CO2` = co2,
@@ -77,6 +78,18 @@ skim(dat_energy)
 
 La base de données sur l'énergie contient 10 215 observations pour un total de 128 variables. Pareillement à celle précédente, elle ne contient que 2 variables de type *character*, les autres sont des variables numériques. La base est très complète, elle contient des informations sur une panoplie de forme d'énergie.
 
+```{r, warning = FALSE}
+dat_energy_summary = dat_energy %>% 
+    filter(year >= 1990) %>% 
+    select(c(renewables_elec_per_capita, renewables_share_elec, per_capita_electricity, continent)) %>%
+    drop_na() %>% 
+    rename(`Génération d'électr. renouvelable per hab. en kW/h` = renewables_elec_per_capita,
+           `Pourcentage d'énergie renouvelable` = renewables_share_elec,
+           `Génération d'électricité totale par hab. en kW/h` = per_capita_electricity)
+
+datasummary(All(dat_energy_summary) ~ continent*((Moyenne = Mean) + (`Écart-type` = SD) + Min + Max + (Histogramme = Histogram)), data = dat_energy_summary)
+```
+
 ### Données sur l'espérance de vie
 
 ```{r}
@@ -84,6 +97,47 @@ skim(dat_life)
 ```
 
 Concernant la base de données de Gapminder sur l'espérance de vie, celle-ci contient 56 616 observations et 4 variables. Elle est assez sobre, elle ne contient que l'année, le nom du pays, son code et son espérance de vie.
+
+```{r, warning = FALSE}
+dat_life_summary = dat_life %>% 
+    select(-c(X, geo, name, time)) %>%
+    drop_na() %>% 
+    rename(`Espérance de vie` = Life.expectancy,)
+
+datasummary(All(dat_life_summary) ~ continent*((Moyenne = Mean) + (`Écart-type` = SD) + Min + Max + (Histogramme = Histogram)), data = dat_life_summary)
+```
+
+## Analyse de données
+
+### Consolidation des données
+
+Afin de faciliter l'analyse de données, il est préférable de rassembler l'ensemble des base de données en une.
+
+```{r}
+col_co2 = colnames(dat_co2)
+
+col_energy = colnames(dat_energy)
+
+inter_col = intersect(col_co2, col_energy)
+
+inter_col = inter_col[-c(2,3)]
+
+dat_energy_md = dat_energy %>% select(-c(all_of(inter_col)))
+
+dat_full = inner_join(dat_co2, dat_energy_md, by = c("country", "year"), keep = FALSE)
+
+dat_life_md = dat_life %>% rename(year = time,
+                                  country = name) %>% 
+    select(c(year, country, Life.expectancy))
+
+dat_full = inner_join(dat_full, dat_life_md, by = c("country", "year"), keep = FALSE)
+```
+
+### Analyse #1
+
+```{r}
+mod1 = group_by(continent) %>%  lm(co2 ~ gdp + electricity_demand + population + Life.expectancy + year , data = dat_full, na.action=na.exclude)
+```
 
 ## Un peu d'interactivité pour le plaisir!
 
