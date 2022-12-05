@@ -86,6 +86,10 @@ myList <- list(dat_co2 = dat_co2,
 mapply(write.csv, myList, file=paste0(base_write,"/",names(myList), '.csv'))
 ```
 
+## Téléchargement des données
+
+L'ensemble des données traitées et non-traitées est disponible sur cette [page.](data.qmd)
+
 Reimport.
 
 Créer un script dans le dossier R
