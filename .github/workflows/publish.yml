@@ -14,6 +14,25 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v3
 
+      - name: Setup renv # Set up R env to install packages
+        run: |
+          install.packages('remotes')
+          install.packages('jsonlite')
+          remotes::install_github("rstudio/renv")
+          remotes::install_github("jsonlite")
+        shell: Rscript {0}
+        
+      - uses: actions/cache@v2 # Cache packages so won't be compiled everytime job is run
+        with:
+          path: ~/.local/share/renv
+          key: ${{ runner.os }}-renv-${{ hashFiles('**/renv.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-renv-
+            
+      - name: Install dependencies # Install the dependencies eg. Dplyr, tidyverse etc
+        run: renv::restore()
+        shell: Rscript {0}
+
       - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2
 
@@ -23,3 +42,5 @@ jobs:
           target: gh-pages
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+
