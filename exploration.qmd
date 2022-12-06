@@ -136,7 +136,16 @@ dat_full = inner_join(dat_full, dat_life_md, by = c("country", "year"), keep = F
 ### Analyse #1
 
 ```{r}
-mod1 = group_by(continent) %>%  lm(co2 ~ gdp + electricity_demand + population + Life.expectancy + year , data = dat_full, na.action=na.exclude)
+mod1 = lm(co2 ~ gdp + population + Life.expectancy, data = dat_full, na.action=na.exclude)
+
+summary(mod1)
+
+```
+
+### Analyse #2
+
+```{r}
+
 ```
 
 ## Un peu d'interactivité pour le plaisir!
