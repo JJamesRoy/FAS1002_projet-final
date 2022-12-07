@@ -1,0 +1,65 @@
+---
+title: "Visualisation des données"
+title-block-banner: false
+description: | 
+  Plusieurs visualisations sont disponibles ici.
+# à changer
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+# Modifier les détails que vous voulez
+author:
+  - name: "James Roy"
+    # Votre site web perso ou github
+    url: https://github.com/JJamesRoy
+    # les champs d'affiliation sont optionnels, vous pouvez les
+    # comment out en ajoutant un # devant.
+    affiliation: FAS1002
+    affiliation-url: https://FAS1002.github.io/A22
+    # changer pour votre propre orcid id
+    # https://orcid.org/ pour vous inscrire.
+    orcid: 0000-0002-0941-5961
+
+# TRUE == Générer une citation pour cette page précise. Pour enlever, mettre false.
+citation: true
+# Inclure les références que vous utilisez dans vos rapports. Je conseille Zotero pour construire
+# ce fichier ou de connecter RStudio directement pour pouvoir citer avec @nom-de-reference.
+bibliography: references.bib
+---
+
+```{r, warning = FALSE, message = FALSE}
+library(tidyverse)
+library(leaflet)
+library(gganimate)
+```
+
+```{r}
+leaflet
+```
+
+```{r, message = FALSE, warning = FALSE}
+dat_full %>% 
+    group_by(continent, year) %>% 
+    mutate(mean = weighted.mean(co2_per_capita, population)) %>% 
+    #drop.na() %>% 
+    ggplot() +
+    aes(year, mean, color = factor(continent)) +
+    geom_line() +
+    transition_reveal(year) +
+    theme_minimal()
+```
+
+```{r}
+dat_p2 = dat_full %>% 
+    group_by(continent, year) %>% 
+    summarise(mean = weighted.mean(renewables_share_elec, population))
+
+p2 = ggplot(p1, aes(continent, mean)) +
+    geom_col() +
+    transition_time(year) +
+    labs(title = "Year: {frame_time}") +
+    ease_aes("linear", interval = 0.1) +
+    theme_minimal()
+
+animate(p2,
+        end_pause = 10,
+        start_pause = 10)
+```

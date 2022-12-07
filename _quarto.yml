@@ -32,6 +32,8 @@ website:
         text: Importation des données
       - href : Exploration des données
         text : exploration.qmd
+      - href : Visualisation des données
+        text : visu.qmd
     right:
       - href: a-propos.qmd
         text: À propos 
