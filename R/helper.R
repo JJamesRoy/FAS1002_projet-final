@@ -26,7 +26,7 @@ if (as.character(today()) != files_date[1] & as.character(today()) != files_date
     print("Fichier déjà acquis")
 }
 
-if (format(today(), "%Y-%m") != format(as_date(as.character(files_date[3])), "%Y-%m")){
+if (format(today(), "%Y-%m") != format(as_date(as.character(files_date[3])), "%Y-%m") | is.null(files_date[3])){
     source(import_path[2])
 } else {
     print("Fichier déjà acquis")

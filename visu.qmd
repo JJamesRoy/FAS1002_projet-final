@@ -29,47 +29,61 @@ bibliography: references.bib
 library(tidyverse)
 library(leaflet)
 library(gganimate)
+library(fs)
 ```
 
 ```{r}
-leaflet
+path = path("data", "processed")
+
+file_full = path(path, list.files(path))
+
+dat_full = read.csv(file_full)
+```
+
+```{r}
+#leaflet
 ```
 
 ```{r, message = FALSE, warning = FALSE}
-dat_full %>% 
-    group_by(continent, year) %>% 
-    mutate(mean = weighted.mean(co2_per_capita, population)) %>% 
-    #drop.na() %>% 
-    ggplot() +
-    aes(year, mean, color = factor(continent)) +
-    geom_line() +
-    transition_reveal(year) +
-    theme_minimal()
+#dat_full %>% 
+#    group_by(continent, year) %>% 
+#    mutate(mean = weighted.mean(co2_per_capita, population)) %>% 
+#    #drop.na() %>% 
+#    ggplot() +
+#    aes(year, mean, color = factor(continent)) +
+#    geom_line() +
+#    transition_reveal(year) +
+#    theme_minimal()
 ```
 
 ```{r}
-dat_p2 = dat_full %>% 
-    group_by(continent, year) %>% 
-    summarise(mean = weighted.mean(renewables_share_elec, population, na.rm = TRUE))
-
-p2 = ggplot(dat_p2, aes(continent, mean)) +
-    geom_col() +
-    transition_time(year) +
-    labs(title = "Year: {frame_time}") +
-    ease_aes("linear", interval = 0.1) +
-    theme_minimal()
-# Saut biz de l'afrique en 2000
-animate(p2,
-        end_pause = 10,
-        start_pause = 10)
+#dat_p2 = dat_full %>% 
+#    group_by(continent, year) %>% 
+#    summarise(mean = weighted.mean(renewables_share_elec, population, na.rm = TRUE))
+#
+#p2 = ggplot(dat_p2, aes(continent, mean)) +
+#    geom_col() +
+#    transition_time(year) +
+#    labs(title = "Year: {frame_time}") +
+#    ease_aes("linear", interval = 0.1) +
+#    theme_minimal()
+## Saut biz de l'afrique en 2000
+#animate(p2,
+#        end_pause = 10,
+#        start_pause = 10)
 ```
 
 ```{r}
-dat_p3 = dat_full %>% drop_na(Life.expectancy) %>% filter(year >= 1980 & year <2020) %>% group_by(continent, year) %>% mutate(mean = weighted.mean(Life.expectancy, population))
+#dat_p3 = dat_full %>% drop_na(Life.expectancy) %>% filter(year >= 1980 & year <2020) %>% #group_by(continent, year) %>% mutate(mean = weighted.mean(Life.expectancy, population))
+#
+#p3 = ggplot(dat_p3, aes(year, Life.expectancy)) +
+#    geom_point(alpha = 0.5) +
+#    geom_point(aes(year, mean), color = "red") +
+#    facet_wrap(~continent) +
+#    theme_minimal()
+```
 
-p3 = ggplot(dat_p3, aes(year, Life.expectancy), size = population) +
-    geom_point() +
-    geom_point(aes(year, mean), color = "red") +
-    facet_wrap(~continent) +
-    transition_reveal(year)
+```{r}
+#p4 = ggplot(dat_full, aes(gdp_per_capita, Life.expectancy)) +
+#    geom_point()
 ```

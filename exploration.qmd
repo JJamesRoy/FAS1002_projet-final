@@ -134,6 +134,16 @@ dat_full = inner_join(dat_full, dat_life_md, by = c("country", "year"), keep = F
 
 dat_full = dat_full %>% 
     mutate(gdp_per_capita = gdp/population)
+
+base_write = path("data","processed")
+
+files_remove = list.files(base_write)
+
+files_remove = path(base_write, files_remove)
+
+file.remove(files_remove)
+
+write.csv(dat_full, file = paste0(base_write, "/dat_full.csv"))
 ```
 
 ### Analyse #1

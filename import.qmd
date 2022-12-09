@@ -31,7 +31,7 @@ Ce travail utilise les données de [Gapminder](https://www.gapminder.org/) et de
 
 ## Importation des données
 
-À l'aide d'un script qui utilise les *library* fs de @fs, lubridate de @lubri, googlesheets4 de @gs4 ainsi que taskscheduleR de @task, les données sont importées directement à partir de lien internet.
+À l'aide d'un script qui utilise les *library* fs de @fs, lubridate de @lubri ainsi que googlesheets4 de @gs4 , les données sont importées directement à partir de lien internet.
 
 Les données de Our World in Data sont mises à jour quotidiennement tandis que celles de Gapminder sont mis à jour mensuellement.
 
@@ -44,6 +44,8 @@ library(countrycode)
 ```
 
 ```{r import}
+source("R/helper.R")
+
 base_path = path("data","raw")
 
 files = list.files(base_path)
@@ -57,19 +59,19 @@ dat_energy = df[[2]]
 dat_life = df[[3]]
 ```
 
-```{r co2}
+```{r co2, warning = FALSE}
 dat_co2 = dat_co2 %>% drop_na(co2) %>% 
     mutate(continent = countrycode(iso_code, 'iso3c', 'continent')) %>%
     mutate(continent = recode(continent, `Africa` = "Afrique", `Americas` = "Amériques", `Asia` = "Asie", `Oceania` = "Océanie"))
 ```
 
-```{r energy}
+```{r energy, warning = FALSE}
 dat_energy = dat_energy %>% drop_na(energy_per_capita) %>% 
     mutate(continent = countrycode(iso_code, 'iso3c', 'continent')) %>% 
     mutate(continent = recode(continent, `Africa` = "Afrique", `Americas` = "Amériques", `Asia` = "Asie", `Oceania` = "Océanie"))
 ```
 
-```{r life}
+```{r life, warning = FALSE}
 dat_life = dat_life %>% select(-X) %>% 
     mutate(continent = countrycode(geo, 'iso3c', 'continent')) %>% 
     mutate(continent = recode(continent, `Africa` = "Afrique", `Americas` = "Amériques", `Asia` = "Asie", `Oceania` = "Océanie"))
@@ -78,6 +80,11 @@ dat_life = dat_life %>% select(-X) %>%
 ```{r, message = FALSE}
 base_write = path("data","cache")
 
+files_remove = list.files(base_write)
+
+files_remove = path(base_write, files_remove)
+
+file.remove(files_remove)
 
 myList <- list(dat_co2 = dat_co2, 
                dat_energy = dat_energy,
