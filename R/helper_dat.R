@@ -12,7 +12,7 @@ files = list.files(base_path)
 
 files_name = path(base_path, files)
 
-file.remove(files_name)
+file.remove(files_name[c(1,2)])
 
 ###########
 
@@ -41,21 +41,3 @@ co2_path = path(base_path,
 
 download.file(url = URL_co2, destfile = co2_path)
 
-#######
-
-URL_life = "https://docs.google.com/spreadsheets/d/1RheSon1-q4vFc3AGyupVPH6ptEByE-VtnjOCselU0PE/edit#gid=176703676"
-
-life_name = paste0("life_expectancy_",
-                  today(),
-                  ".csv")
-
-life_path = path(base_path,
-                 life_name)
-
-gs4_deauth()
-
-life_expec = read_sheet(URL_life, sheet = 4)
-
-write.csv(life_expec, file = life_path)
-
-############
