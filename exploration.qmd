@@ -131,6 +131,9 @@ dat_life_md = dat_life %>% rename(year = time,
     select(c(year, country, Life.expectancy))
 
 dat_full = inner_join(dat_full, dat_life_md, by = c("country", "year"), keep = FALSE)
+
+dat_full = dat_full %>% 
+    mutate(gdp_per_capita = gdp/population)
 ```
 
 ### Analyse #1
@@ -145,7 +148,11 @@ summary(mod1)
 ### Analyse #2
 
 ```{r}
+mod2 = lm(renewables_energy_per_capita ~ gdp, data = dat_full, na.action=na.exclude)
 
+mod2 = lm(renewables_electricity ~ gdp_per_capita, data = dat_full, na.action=na.exclude)
+
+summary(mod2)
 ```
 
 ## Un peu d'interactivité pour le plaisir!

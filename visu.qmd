@@ -50,16 +50,26 @@ dat_full %>%
 ```{r}
 dat_p2 = dat_full %>% 
     group_by(continent, year) %>% 
-    summarise(mean = weighted.mean(renewables_share_elec, population))
+    summarise(mean = weighted.mean(renewables_share_elec, population, na.rm = TRUE))
 
-p2 = ggplot(p1, aes(continent, mean)) +
+p2 = ggplot(dat_p2, aes(continent, mean)) +
     geom_col() +
     transition_time(year) +
     labs(title = "Year: {frame_time}") +
     ease_aes("linear", interval = 0.1) +
     theme_minimal()
-
+# Saut biz de l'afrique en 2000
 animate(p2,
         end_pause = 10,
         start_pause = 10)
+```
+
+```{r}
+dat_p3 = dat_full %>% drop_na(Life.expectancy) %>% filter(year >= 1980 & year <2020) %>% group_by(continent, year) %>% mutate(mean = weighted.mean(Life.expectancy, population))
+
+p3 = ggplot(dat_p3, aes(year, Life.expectancy), size = population) +
+    geom_point() +
+    geom_point(aes(year, mean), color = "red") +
+    facet_wrap(~continent) +
+    transition_reveal(year)
 ```

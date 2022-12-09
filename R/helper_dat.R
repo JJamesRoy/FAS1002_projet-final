@@ -32,10 +32,9 @@ download.file(url = URL_energy, destfile = energy_path)
 
 URL_co2 = "https://nyc3.digitaloceanspaces.com/owid-public/data/co2/owid-co2-data.csv"
 
-co2_name = paste("co2_",
+co2_name = paste0("co2_",
                  today(),
-                 ".csv",
-                 sep = "")
+                 ".csv")
 
 co2_path = path(base_path,
                 co2_name)
@@ -46,10 +45,9 @@ download.file(url = URL_co2, destfile = co2_path)
 
 URL_life = "https://docs.google.com/spreadsheets/d/1RheSon1-q4vFc3AGyupVPH6ptEByE-VtnjOCselU0PE/edit#gid=176703676"
 
-life_name = paste("life_expectancy_",
+life_name = paste0("life_expectancy_",
                   today(),
-                  ".csv",
-                  sep = "")
+                  ".csv")
 
 life_path = path(base_path,
                  life_name)
