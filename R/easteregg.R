@@ -18,3 +18,4 @@ if (x == 1){
     file.rename(img[2], img_name)
 }
 
+# stringi, stro-rand

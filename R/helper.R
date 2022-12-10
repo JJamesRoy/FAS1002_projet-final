@@ -17,6 +17,7 @@ files_name = path(base_path, files)
 
 files_date = str_extract_all(files_name, "(?<=_).*(?<=\\d)")
 
+#purrr ? à la place de brute
 
 ########
 

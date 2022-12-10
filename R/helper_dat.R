@@ -1,6 +1,5 @@
 library(lubridate)
 library(fs)
-library(googlesheets4)
 
 #########
 
