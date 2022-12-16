@@ -155,52 +155,14 @@ summary(mod1)
 
 ```
 
+Comme il est possible de le voir dans le résumé de la régression ci-haut. L'effet du PIB du pays sur l'émission de celui-ci est significatif (P-value proche de 0). En effet, en contrôlant pour la population et l'espérance de vie, on voit qu'en moyenne et dans nos données, un 1\$ de PIB en plus augmente les émissions de CO2 de 0,0004392 gramme. Plus simplement, 1 M\$ de PIB en plus augmente les émissions de 0,4392 kg. Or, malgré la relation significative, il est difficile d'établir une relation causale. Il faudrait s'intéresser plus profondément au sujet.
+
 ### Analyse #2
 
 ```{r}
-mod2 = lm(renewables_energy_per_capita ~ gdp, data = dat_full, na.action=na.exclude)
-
-mod2 = lm(renewables_electricity ~ gdp_per_capita, data = dat_full, na.action=na.exclude)
-
+dat_mod2 = dat_full %>% filter(year >= 1990)
+mod2 = lm(renewables_share_elec ~ log(gdp_per_capita), data = dat_full, na.action=na.exclude)
 summary(mod2)
 ```
 
-## Un peu d'interactivité pour le plaisir!
-
-```{r map}
-```
-
-## Peut-être que ça vous inspirera!
-
-```{r plotly, message=FALSE, warning=FALSE}
-library(plotly)
-library(gapminder)
-df <- gapminder
-
-fig <- df %>%
-  plot_ly(
-    x = ~ gdpPercap,
-    y = ~ lifeExp,
-    size = ~ pop,
-    color = ~ continent,
-    frame = ~ year,
-    text = ~ country,
-    hoverinfo = "text",
-    type = 'scatter',
-    mode = 'markers',
-    width = "100%",
-    height = 600
-  )
-
-fig <- fig %>% layout(xaxis = list(type = "log"))
-
-fig <- fig %>%
-  animation_button(
-    x = 0, xanchor = "left", y = -0.15, yanchor = "bottom"
-  )
-fig
-```
-
-------------------------------------------------------------------------
-
-À votre imagination de jouer!
+Dans cette deuxième analyse, je tente d'observer le lien entre le PIB par habitant et la part d'énergie renouvelable dans le mix énergétique du pays. Selon la régression ci-haut, le PIB/hab semble avoir un effet significatif et négatif sur le part d'énergie renouvelable. En effet, une hausse de 1% du PIB par habitant diminue la part des énergies renouvelables de 6,95% en moyenne.
