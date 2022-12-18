@@ -19,7 +19,7 @@ author:
     orcid: 0000-0002-0941-5961
 
 # TRUE == Générer une citation pour cette page précise. Pour enlever, mettre false.
-citation: true
+citation: false
 # Inclure les références que vous utilisez dans vos rapports. Je conseille Zotero pour construire
 # ce fichier ou de connecter RStudio directement pour pouvoir citer avec @nom-de-reference.
 bibliography: references.bib
@@ -55,7 +55,7 @@ dat_life = df[[3]]
 skim(dat_co2)
 ```
 
-La base de donnée OWiD sur le CO2 est composée de 31 349 observations et de 74 variables. La plupart des variables sont numériques (sauf le nom des pays et son code ISO). Les autres variables ne concernent pas seulement le CO2, mais aussi le méthane, le protoxyde d'azote ou encore le PIB.
+La base de donnée OWiD sur le CO2 ([@owidco2andothergreenhousegasemissions]) est composée de 31 349 observations et de 74 variables. La plupart des variables sont numériques (sauf le nom des pays et son code ISO). Les autres variables ne concernent pas seulement le CO2, mais aussi le méthane, le protoxyde d'azote ou encore le PIB.
 
 ```{r, warning = FALSE}
 dat_co2_summary = dat_co2 %>% 
@@ -76,7 +76,7 @@ datasummary(All(dat_co2_summary) ~ continent*((Moyenne = Mean) + (`Écart-type` 
 skim(dat_energy)
 ```
 
-La base de données sur l'énergie contient 10 215 observations pour un total de 128 variables. Pareillement à celle précédente, elle ne contient que 2 variables de type *character*, les autres sont des variables numériques. La base est très complète, elle contient des informations sur une panoplie de forme d'énergie.
+La base de données sur l'énergie ([@owidenergy]) contient 10 215 observations pour un total de 128 variables. Pareillement à celle précédente, elle ne contient que 2 variables de type *character*, les autres sont des variables numériques. La base est très complète, elle contient des informations sur une panoplie de forme d'énergie.
 
 ```{r, warning = FALSE}
 dat_energy_summary = dat_energy %>% 
@@ -96,7 +96,7 @@ datasummary(All(dat_energy_summary) ~ continent*((Moyenne = Mean) + (`Écart-typ
 skim(dat_life)
 ```
 
-Concernant la base de données de Gapminder sur l'espérance de vie, celle-ci contient 56 616 observations et 4 variables. Elle est assez sobre, elle ne contient que l'année, le nom du pays, son code et son espérance de vie.
+Concernant la base de données de Gapminder ([@lifeexp]) sur l'espérance de vie, celle-ci contient 56 616 observations et 4 variables. Elle est assez sobre, elle ne contient que l'année, le nom du pays, son code et son espérance de vie.
 
 ```{r, warning = FALSE}
 dat_life_summary = dat_life %>% 
@@ -143,7 +143,9 @@ files_remove = path(base_write, files_remove)
 
 file.remove(files_remove)
 
-write.csv(dat_full, file = paste0(base_write, "/dat_full.csv"))
+dat_name = path(base_write, "dat_full")
+
+write.csv(dat_full, file = paste0(dat_name, ".csv"))
 ```
 
 ### Analyse #1
@@ -157,6 +159,16 @@ summary(mod1)
 
 Comme il est possible de le voir dans le résumé de la régression ci-haut. L'effet du PIB du pays sur l'émission de celui-ci est significatif (P-value proche de 0). En effet, en contrôlant pour la population et l'espérance de vie, on voit qu'en moyenne et dans nos données, un 1\$ de PIB en plus augmente les émissions de CO2 de 0,0004392 gramme. Plus simplement, 1 M\$ de PIB en plus augmente les émissions de 0,4392 kg. Or, malgré la relation significative, il est difficile d'établir une relation causale. Il faudrait s'intéresser plus profondément au sujet.
 
+```{mermaid}
+flowchart LR
+  A[GDP] --> B(CO2)
+  C[Population] --> B
+  D[Life Expectancy] --> C
+  D & C --> A
+```
+
+Avec une analyse basée sur les graphes orientés acycliques (GOA ou en anglais *DAG),* on voit que la régression représente un effet causale, or il manque beaucoup de variables (qui ne sont pas disponibles dans le *dataset*) pour être proche d'une relation causale. Par exemple, la part d'industrie lourde ou de production d'énergie fossile seraient des variables qui amélioraient le modèle (car elles affectent le PIB et l'émission de CO2)
+
 ### Analyse #2
 
 ```{r}
@@ -166,3 +178,14 @@ summary(mod2)
 ```
 
 Dans cette deuxième analyse, je tente d'observer le lien entre le PIB par habitant et la part d'énergie renouvelable dans le mix énergétique du pays. Selon la régression ci-haut, le PIB/hab semble avoir un effet significatif et négatif sur le part d'énergie renouvelable. En effet, une hausse de 1% du PIB par habitant diminue la part des énergies renouvelables de 6,95% en moyenne.
+
+```{mermaid}
+flowchart LR
+  A[PIB par habitant] --> B(Part d'électricité renouvelable)
+```
+
+Encore une fois, avec une analyse basée sur les graphes orientés acycliques (GOA ou en anglais *DAG),* on voit que la régression représente presque un effet causale. En revanche pour améliorer le modèle, il faudrait ajouter des variables comme l'investissement ou encore les subventions gouvernementales sur les énergies propres (ces variables affectent X et Y donc on doit les contrôler pour que le $\beta$ ne soit pas biaisé).
+
+### Rappel :
+
+L'ensemble des données traitées et non-traitées est disponible sur cette [page.](data.qmd)

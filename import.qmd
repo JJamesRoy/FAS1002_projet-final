@@ -19,7 +19,7 @@ author:
     orcid: 0000-0002-0941-5961
 
 # TRUE == Générer une citation pour cette page précise. Pour enlever, mettre false.
-citation: true
+citation: false
 # Inclure les références que vous utilisez dans vos rapports. Je conseille Zotero pour construire
 # ce fichier ou de connecter RStudio directement pour pouvoir citer avec @nom-de-reference.
 bibliography: references.bib
@@ -43,7 +43,7 @@ library(tidyverse)
 library(countrycode)
 ```
 
-```{r import}
+```{r import, message = FALSE, warning=FALSE}
 source("R/helper.R")
 
 base_path = path("data","raw")
@@ -97,20 +97,6 @@ mapply(write.csv, myList, file=paste0(base_write,"/",names(myList), '.csv'))
 
 L'ensemble des données traitées et non-traitées est disponible sur cette [page.](data.qmd)
 
-Reimport.
+## Exploration et analyse des données
 
-Créer un script dans le dossier R
-
-ggtable
-
-Il est maintenant le temps de décrire votre projet avant de passer au document suivant, soit l'importation et la manipulation des données.
-
-Je vous conseille d'écrire cette partie en dernier, une fois que vous aurez déjà vos résultats et figures afin d'éviter de réécrire cette page plusieurs fois.
-
-::: callout-important
-N'oubliez pas d'inclure vos références sur chacune des pages!
-:::
-
-Par exemple:
-
-> Les données proviennent entre autres de @owidenergy.
+Les analyses et explorations des données se trouvent sur cette [page.](exploration.qmd)
