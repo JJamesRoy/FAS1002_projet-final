@@ -31,8 +31,10 @@ library(fs)
 ```
 
 ```{r}
+bulk = path("data", "bulk_data")
+file.remove(paste0(bulk, ".zip"))
 files2zip <- dir(path("data", "raw"), full.names = TRUE)
-zip(zipfile = path("data", "bulk_data"), files = files2zip)
+zip(zipfile = bulk, files = files2zip)
 ```
 
 ```{r}
@@ -43,6 +45,8 @@ base_file = path(base, list.files(base))
 dat = read.csv(base_file)
 ```
 
+Les données modifiées se trouvent ci-dessous :
+
 ```{r, warning = FALSE}
 datatable(
   dat, extensions = 'Buttons', options = list(
@@ -52,6 +56,8 @@ datatable(
 )
 ```
 
+Les données brutes sont disponibles ici dans un fichier compressé.
+
 ```{=html}
-<a href="/data/bulk_data.zip" download>Download File</a>
+<a href="/data/bulk_data.zip" download>Télécharger les données</a>
 ```
