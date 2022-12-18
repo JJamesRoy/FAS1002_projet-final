@@ -30,10 +30,12 @@ website:
         text : Introduction
       - href: import.qmd
         text: Importation des données
-      - href : Exploration des données
-        text : exploration.qmd
-      - href : Visualisation des données
-        text : visu.qmd
+      - href : exploration.qmd
+        text : Exploration des données
+      - href : visu.qmd
+        text : Visualisation des données
+      - href : data.qmd
+        text : Téléchargement des données
     right:
       - href: a-propos.qmd
         text: À propos 

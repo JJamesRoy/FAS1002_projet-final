@@ -19,7 +19,7 @@ author:
     orcid: 0000-0002-0941-5961
 
 # TRUE == Générer une citation pour cette page précise. Pour enlever, mettre false.
-citation: true
+citation: false
 # Inclure les références que vous utilisez dans vos rapports. Je conseille Zotero pour construire
 # ce fichier ou de connecter RStudio directement pour pouvoir citer avec @nom-de-reference.
 bibliography: references.bib
@@ -27,8 +27,31 @@ bibliography: references.bib
 
 ```{r, warning = FALSE}
 library(DT)
+library(fs)
 ```
 
 ```{r}
+files2zip <- dir(path("data", "raw"), full.names = TRUE)
+zip(zipfile = path("data", "bulk_data"), files = files2zip)
+```
 
+```{r}
+base = path("data","processed")
+
+base_file = path(base, list.files(base))
+
+dat = read.csv(base_file)
+```
+
+```{r, warning = FALSE}
+datatable(
+  dat, extensions = 'Buttons', options = list(
+    dom = 'Bfrtip',
+    buttons = c('csv', 'excel')
+  )
+)
+```
+
+```{=html}
+<a href="/data/bulk_data.zip" download>Download File</a>
 ```
