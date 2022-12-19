@@ -63,18 +63,24 @@ dat_life = df[[3]]
 dat_co2 = dat_co2 %>% drop_na(co2) %>% 
     mutate(continent = countrycode(iso_code, 'iso3c', 'continent')) %>%
     mutate(continent = recode(continent, `Africa` = "Afrique", `Americas` = "Amériques", `Asia` = "Asie", `Oceania` = "Océanie"))
+
+dat_co2$year = ymd(dat_co2$year, truncated = 2L)
 ```
 
 ```{r energy, warning = FALSE}
 dat_energy = dat_energy %>% drop_na(energy_per_capita) %>% 
     mutate(continent = countrycode(iso_code, 'iso3c', 'continent')) %>% 
     mutate(continent = recode(continent, `Africa` = "Afrique", `Americas` = "Amériques", `Asia` = "Asie", `Oceania` = "Océanie"))
+
+dat_energy$year = ymd(dat_energy$year, truncated = 2L)
 ```
 
 ```{r life, warning = FALSE}
 dat_life = dat_life %>% select(-X) %>% 
     mutate(continent = countrycode(geo, 'iso3c', 'continent')) %>% 
     mutate(continent = recode(continent, `Africa` = "Afrique", `Americas` = "Amériques", `Asia` = "Asie", `Oceania` = "Océanie"))
+
+dat_life$time = ymd(dat_life$time, truncated = 2L)
 ```
 
 ```{r, message = FALSE}
@@ -97,6 +103,6 @@ mapply(write.csv, myList, file=paste0(base_write,"/",names(myList), '.csv'))
 
 L'ensemble des données traitées et non-traitées est disponible sur cette [page.](data.qmd)
 
-## Exploration et analyse des données
+## Suite
 
 Les analyses et explorations des données se trouvent sur cette [page.](exploration.qmd)
