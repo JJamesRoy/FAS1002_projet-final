@@ -142,7 +142,7 @@ En somme, sans analyse statistique approfondie, il est difficile d'établir le s
 
 ## Graphique 2
 
-En deuxième,
+Comme deuxième graphique, la moyenne pondérée du CO2 par habitant par continent est représentée au fil des ans. Deux éléments intéressants ressortent du graphique. D'abord, on voit un rattrapage progressif de l'Asie, qui est sans doute du à la croissance économique de ces pays. De l'autre côté, l'Europe et l'Amérique améliorent leurs efficacités énergétiques de façon remarquable à partir de 1980-85.
 
 ```{r, message = FALSE, warning = FALSE}
 dat_p1 = dat_full %>% 
@@ -166,6 +166,10 @@ animate(p1,
         end_pause = 10)
 ```
 
+## Graphique 3
+
+Ensuite, le troisième graphique représente la distribution de la part d'électricité de source renouvelable dans chaque continent (moyenne pondérée par la population). Logiquement, on voit une progression quasi constante pour chacun des continents.
+
 ```{r, warning = FALSE}
 dat_p2 = dat_full %>% 
     group_by(continent, year) %>% 
@@ -177,7 +181,7 @@ p2 = ggplot(dat_p2, aes(continent, mean, fill = as.factor(continent))) +
     labs(subtitle = "Year: {frame_time}",
          y = "Part",
          x = "Continent",
-         title = "Distribution de la part d'énergie\nrenouvelable par continent ") +
+         title = "Distribution de la part d'électricité\nrenouvelable par continent ") +
     scale_fill_manual(values = colors) +
     scale_y_continuous(label = scales::percent) +
     ease_aes("linear", interval = 0.1) +
@@ -193,16 +197,19 @@ animate(p2,
         start_pause = 10)
 ```
 
+## Graphique 4
+
+Le quatrième graphique représente simplement l'évolution de l'espérance de vie par continent au fil des années. Il est possible de remarquer divers événements historiques dans les points (par exemple : dislocation de l'URSS ou encore le génocide des Tutsis au Rwanda).
+
 ```{r, warning = FALSE}
 dat_p3 = dat_full %>% drop_na(Life.expectancy) %>% filter(year >= 1980 & year <2020) %>% group_by(continent, year) %>% mutate(mean = weighted.mean(Life.expectancy, population))
 
 p3 = ggplot(dat_p3, aes(year, mean, color = as.factor(continent))) +
-    geom_point(alpha = 0.5) +
-    guides(color="none") +
+    geom_point(alpha = 0.9) +
     labs(title = "Distribution de l'espérance de vie par continent selon les années",
          y = "Espérance de vie en années",
          x = "Année") +
-    scale_color_manual(values = colors) +
+    scale_color_manual(values = colors, name = "Continent") +
     theme_minimal() +
     theme(text = element_text(family = "Roboto"),
           plot.title = element_text(hjust = 0.5),
@@ -211,6 +218,10 @@ p3 = ggplot(dat_p3, aes(year, mean, color = as.factor(continent))) +
 
 p3
 ```
+
+## Graphique 5
+
+En dernier, l'espérance de vie et le PIB par habitant (échelle log) sont représentés par continent au fil des années. On voit une corrélation assez forte ainsi qu'une croissante constante.
 
 ```{r, warning = FALSE, message = FALSE}
 p4 = ggplot(dat_full, aes(gdp_per_capita, Life.expectancy, size = population, color = continent)) +
