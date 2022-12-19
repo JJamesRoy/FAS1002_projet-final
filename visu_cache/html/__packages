@@ -16,3 +16,8 @@ rmapshaper
 RColorBrewer
 classInt
 countrycode
+sysfonts
+showtextdb
+showtext
+htmlwidgets
+lubridate
