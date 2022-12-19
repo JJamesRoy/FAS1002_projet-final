@@ -37,6 +37,7 @@ library(tools)
 library(RColorBrewer)
 library(classInt)
 library(countrycode)
+library(showtext)
 ```
 
 ```{r}
@@ -92,6 +93,21 @@ map@data = right_join(dat_map, map@data,
 
 ```
 
+```{r}
+font_add_google("Roboto Mono", "Roboto")
+showtext_auto()
+
+colors = c("#d8dcff", "#aeadf0", "#c38d94", "#a76571", "#565676")
+```
+
+## Graphique 1
+
+Dans ce premier graphique, il est possible d'observer la répartition des émissions de CO2 par \$ de PIB. Cela est utile pour analyser l'intensité des économies au niveau des émissions. Logiquement, il devrait y avoir deux effets contraires :
+
+1.  Effet #1 : Les pays riches ont des industries plus développées technologiquement et une économie tertiaire plus développée que les autres pays. Donc la corrélation devrait être négative.
+
+2.  Effet #2 : Les pays riches ont plus tendances à surconsommer, à utiliser des moyens de transport plus polluants et à avoir un quotidient plus intensif au niveau énergétique. Donc la corrélation devrait positive.
+
 ```{r, warning = FALSE, message = FALSE}
 breaks_qt <- classIntervals(map$co2_per_gdp, n = 9, style = "quantile")
   #Break the variable into quantiles
@@ -122,6 +138,12 @@ leaflet() %>%
 Gros problème dans ce graphique. Certains pays se lient pas alors qu'ils ont le même code ISO3C. Je n'ai pas trouvé la cause ni de fix donc je vais laisser ça comme ça...
 :::
 
+En somme, sans analyse statistique approfondie, il est difficile d'établir le sens de la corrélation. En effet, elle semble mitigiée.
+
+## Graphique 2
+
+En deuxième,
+
 ```{r, message = FALSE, warning = FALSE}
 dat_p1 = dat_full %>% 
     group_by(continent, year) %>% 
@@ -130,20 +152,41 @@ dat_p1 = dat_full %>%
 p1 = ggplot(dat_p1, aes(year, mean, color = factor(continent))) +
     geom_line() +
     transition_reveal(year) +
-    theme_minimal()
+    scale_color_manual(values = colors, name = "Continent") +
+    labs(title = "Moyenne du CO2 par habitant\npar continent au fil des années",
+         x = "Année",
+         y = "CO2 par habitant") +
+    theme_minimal() +
+    theme(text = element_text(family = "Roboto"),
+          plot.title = element_text(hjust = 0.5, vjust = 5),
+          axis.title.y = element_text(vjust = 7),
+          plot.margin = margin(20,20,20,20, unit = "pt"))
+    
+animate(p1,
+        end_pause = 10)
 ```
 
 ```{r, warning = FALSE}
 dat_p2 = dat_full %>% 
     group_by(continent, year) %>% 
-    summarise(mean = weighted.mean(renewables_share_elec, population, na.rm = TRUE))
+    summarise(mean = 0.01*weighted.mean(renewables_share_elec, population, na.rm = TRUE))
 
-p2 = ggplot(dat_p2, aes(continent, mean)) +
+p2 = ggplot(dat_p2, aes(continent, mean, fill = as.factor(continent))) +
     geom_col() +
     transition_time(year) +
-    labs(title = "Year: {frame_time}") +
+    labs(subtitle = "Year: {frame_time}",
+         y = "Part",
+         x = "Continent",
+         title = "Distribution de la part d'énergie\nrenouvelable par continent ") +
+    scale_fill_manual(values = colors) +
+    scale_y_continuous(label = scales::percent) +
     ease_aes("linear", interval = 0.1) +
-    theme_minimal()
+    theme_minimal() +
+    guides(fill="none") +
+    theme(text = element_text(family = "Roboto"),
+          plot.title = element_text(hjust = 0.5),
+          plot.margin = margin(10,10,10,20, unit = "pt"),
+          axis.title.y = element_text(vjust = 7))
 # Saut biz de l'afrique en 2000
 animate(p2,
         end_pause = 10,
@@ -153,11 +196,18 @@ animate(p2,
 ```{r, warning = FALSE}
 dat_p3 = dat_full %>% drop_na(Life.expectancy) %>% filter(year >= 1980 & year <2020) %>% group_by(continent, year) %>% mutate(mean = weighted.mean(Life.expectancy, population))
 
-p3 = ggplot(dat_p3, aes(year, Life.expectancy)) +
+p3 = ggplot(dat_p3, aes(year, mean, color = as.factor(continent))) +
     geom_point(alpha = 0.5) +
-    geom_point(aes(year, mean), color = "red") +
-    facet_wrap(~continent) +
-    theme_minimal()
+    guides(color="none") +
+    labs(title = "Distribution de l'espérance de vie par continent selon les années",
+         y = "Espérance de vie en années",
+         x = "Année") +
+    scale_color_manual(values = colors) +
+    theme_minimal() +
+    theme(text = element_text(family = "Roboto"),
+          plot.title = element_text(hjust = 0.5),
+          plot.margin = margin(10,10,10,20, unit = "pt"),
+          axis.title.y = element_text(vjust = 7))
 
 p3
 ```
@@ -166,15 +216,22 @@ p3
 p4 = ggplot(dat_full, aes(gdp_per_capita, Life.expectancy, size = population, color = continent)) +
     geom_point() +
     scale_x_continuous(trans = "log10", labels = scales::dollar_format()) +
-    scale_color_viridis_c() +
-    scale_size(range = c(1, 8)) +
+    scale_color_manual(values = c("#011627", "#0027ff", "#2ec4b6", "#e71d36", "#ff9f1c"), name = "Continent") +
     guides(size = "none") +
-    scale_color_discrete(name = "Continent") +
-    labs(x = "PIB par habitant", y = "Espérance de vie", title = "Année: {frame_time}") +
+    labs(x = "PIB par habitant", 
+         y = "Espérance de vie",
+         title = "Espérance de vie\nselon le PIB par habitant",
+         subtitle = "Année: {frame_time}") +
     transition_time(year) +
     shadow_mark(alpha = 0.3, size = 0.5) +
     ease_aes("linear") +
-    theme_minimal()
+    theme_minimal() +
+    theme(text = element_text(family = "Roboto"),
+          plot.title = element_text(hjust = 0.5),
+          plot.margin = margin(20,20,20,20, unit = "pt"),
+          axis.title.y = element_text(vjust = 7))
 
-p4
+animate(p4,
+        end_pause = 10,
+        start_pause = 10)
 ```
