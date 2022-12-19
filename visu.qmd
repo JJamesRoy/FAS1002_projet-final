@@ -84,7 +84,7 @@ na_table = dat_map %>% summarise_all(funs(sum(is.na(.))))
 
 ######
 
-dat_map = dat_map %>% pivot_longer(!country, names_to = "year", values_to = "co2_per_gdp") %>% filter(year == 2019) %>% mutate(iso = countrycode(country, "country.name", "iso3c"))
+dat_map = dat_map %>% pivot_longer(!country, names_to = "year", values_to = "co2_per_gdp") %>% filter(year == 2018) %>% mutate(iso = countrycode(country, "country.name", "iso3c"))
 
 map@data = right_join(dat_map, map@data,
                             by = c("iso" = "ISO3"))
@@ -117,6 +117,10 @@ leaflet() %>%
             title =  'Émission de CO2 par $ de PIB selon les pays')
 
 ```
+
+::: callout-note
+Gros problème dans ce graphique. Certains pays se lient pas alors qu'ils ont le même code ISO3C. Je n'ai pas trouvé la cause ni de fix donc je vais laisser ça comme ça...
+:::
 
 ```{r, message = FALSE, warning = FALSE}
 dat_p1 = dat_full %>% 

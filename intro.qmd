@@ -1,15 +1,15 @@
 ---
-title: "Titre de votre page d'introduction"
+title: "Présentation du projet"
 title-block-banner: true
 description: | 
-  Petite description de votre projet en une ligne.
+  Description détaillé du projet.
 # à changer
-date: "2022-12-21"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
 # Modifier les détails que vous voulez
 author:
   - name: "James Roy"
     # Votre site web perso ou github
-    url: https://github.com/VOTREUSERNAME
+    url: https://github.com/JJamesRoy
     # les champs d'affiliation sont optionnels, vous pouvez les
     # comment out en ajoutant un # devant.
     affiliation: FAS1002
@@ -19,7 +19,7 @@ author:
     orcid: 0000-0002-0941-5961
 
 # TRUE == Générer une citation pour cette page précise. Pour enlever, mettre false.
-citation: true
+citation: false
 # Inclure les références que vous utilisez dans vos rapports. Je conseille Zotero pour construire
 # ce fichier ou de connecter RStudio directement pour pouvoir citer avec @nom-de-reference.
 bibliography: references.bib
