@@ -33,6 +33,7 @@ library(skimr)
 library(modelsummary)
 library(fs)
 library(stringr)
+library(lubridate)
 ```
 
 ```{r import}
@@ -48,6 +49,14 @@ dat_co2 = df[[1]]
 dat_energy = df[[2]]
 dat_life = df[[3]]
 ```
+
+::: callout-note
+## Présentation données
+
+J'ai choisi de seulement présenter les données regroupées par continent (alors que dans les consignes on doit les présenter groupées et non-groupées). En effet, il n'y a qu'un seu argument qui change, mais ça ajoute beaucoup trop de contenu pour rien.
+
+J'ai mis un commentaire dans le bloc de code ci-dessous pour montrer comment je ferais.
+:::
 
 ### Données sur le CO2
 
@@ -68,6 +77,9 @@ dat_co2_summary = dat_co2 %>%
            `Conso. d'énergie en kW/h par hab.` = energy_per_capita)
 
 datasummary(All(dat_co2_summary) ~ continent*((Moyenne = Mean) + (`Écart-type` = SD) + Min + Max + (Histogramme = Histogram)), data = dat_co2_summary)
+
+# Si je veux que ça ne soit pas grouper... :
+# datasummary(All(dat_co2_summary) ~ (Moyenne = Mean) + (`Écart-type` = SD) + Min + Max + (Histogramme = Histogram), data = dat_co2_summary)
 ```
 
 ### Données sur l'énergie
@@ -106,6 +118,20 @@ dat_life_summary = dat_life %>%
 
 datasummary(All(dat_life_summary) ~ continent*((Moyenne = Mean) + (`Écart-type` = SD) + Min + Max + (Histogramme = Histogram)), data = dat_life_summary)
 ```
+
+#### Nombre de jours variables d'intérêt
+
+Comme demandé dans les consignes, on doit calculer le nombre de jours entre la production et la première année des données
+
+```{r}
+dat_life_day = dat_life %>% select(time, name) %>% arrange(time) %>% distinct(name, .keep_all = TRUE)
+
+dat_life_day = dat_life_day %>% mutate(jour = parse_number(as.character(difftime(today(), dat_life_day$time, units = "days"))))
+
+head(dat_life_day[2:3], n = 20)
+```
+
+On voit que le nombre jours écoulés est pareil pour presque l'ensemble des pays (sauf 9 pays).
 
 ## Analyse de données
 
@@ -189,3 +215,7 @@ Encore une fois, avec une analyse basée sur les graphes orientés acycliques (G
 ### Rappel :
 
 L'ensemble des données traitées et non-traitées est disponible sur cette [page.](data.qmd)
+
+## Suite
+
+Pour continuer l'analyse, il suffit de se rendre sur cette [page.](visu.qmd)
