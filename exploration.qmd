@@ -27,7 +27,7 @@ bibliography: references.bib
 
 ## Exploration sommaire des données
 
-```{r message = FALSE, warning = FALSE}
+```{r message = FALSE, warning = FALSE, include = FALSE}
 library(tidyverse)
 library(skimr)
 library(modelsummary)
@@ -36,7 +36,7 @@ library(stringr)
 library(lubridate)
 ```
 
-```{r import}
+```{r import, message = FALSE, warning = FALSE, include = FALSE}
 base_cache = path("data","cache")
 
 files = list.files(base_cache)
@@ -60,13 +60,13 @@ J'ai mis un commentaire dans le bloc de code ci-dessous pour montrer comment je 
 
 ### Données sur le CO2
 
-```{r}
+```{r, echo = FALSE}
 skim(dat_co2)
 ```
 
 La base de donnée OWiD sur le CO2 ([@owidco2andothergreenhousegasemissions]) est composée de 31 349 observations et de 74 variables. La plupart des variables sont numériques (sauf le nom des pays et son code ISO). Les autres variables ne concernent pas seulement le CO2, mais aussi le méthane, le protoxyde d'azote ou encore le PIB.
 
-```{r, warning = FALSE}
+```{r, warning = FALSE, echo = FALSE}
 dat_co2_summary = dat_co2 %>% 
     filter(year >= 1990) %>% 
     select(c(co2, co2_per_capita, co2_per_gdp, energy_per_capita, continent)) %>%
@@ -84,13 +84,13 @@ datasummary(All(dat_co2_summary) ~ continent*((Moyenne = Mean) + (`Écart-type` 
 
 ### Données sur l'énergie
 
-```{r}
+```{r, echo = FALSE}
 skim(dat_energy)
 ```
 
 La base de données sur l'énergie ([@owidenergy]) contient 10 215 observations pour un total de 128 variables. Pareillement à celle précédente, elle ne contient que 2 variables de type *character*, les autres sont des variables numériques. La base est très complète, elle contient des informations sur une panoplie de forme d'énergie.
 
-```{r, warning = FALSE}
+```{r, warning = FALSE, echo = FALSE}
 dat_energy_summary = dat_energy %>% 
     filter(year >= 1990) %>% 
     select(c(renewables_elec_per_capita, renewables_share_elec, per_capita_electricity, continent)) %>%
@@ -104,13 +104,13 @@ datasummary(All(dat_energy_summary) ~ continent*((Moyenne = Mean) + (`Écart-typ
 
 ### Données sur l'espérance de vie
 
-```{r}
+```{r, echo = FALSE}
 skim(dat_life)
 ```
 
 Concernant la base de données de Gapminder ([@lifeexp]) sur l'espérance de vie, celle-ci contient 56 616 observations et 4 variables. Elle est assez sobre, elle ne contient que l'année, le nom du pays, son code et son espérance de vie.
 
-```{r, warning = FALSE}
+```{r, warning = FALSE, echo = FALSE}
 dat_life_summary = dat_life %>% 
     select(-c(X, geo, name, time)) %>%
     drop_na() %>% 
@@ -123,7 +123,7 @@ datasummary(All(dat_life_summary) ~ continent*((Moyenne = Mean) + (`Écart-type`
 
 Comme demandé dans les consignes, on doit calculer le nombre de jours entre la production et la première année des données
 
-```{r}
+```{r, echo = FALSE}
 dat_life_day = dat_life %>% select(time, name) %>% arrange(time) %>% distinct(name, .keep_all = TRUE)
 
 dat_life_day = dat_life_day %>% mutate(jour = parse_number(as.character(difftime(today(), dat_life_day$time, units = "days"))))
@@ -131,7 +131,11 @@ dat_life_day = dat_life_day %>% mutate(jour = parse_number(as.character(difftime
 head(dat_life_day[2:3], n = 20)
 ```
 
+Voici un extrait des 20 pays.
+
+::: callout-note
 On voit que le nombre jours écoulés est pareil pour presque l'ensemble des pays (sauf 9 pays).
+:::
 
 ## Analyse de données
 
@@ -139,7 +143,7 @@ On voit que le nombre jours écoulés est pareil pour presque l'ensemble des pay
 
 Afin de faciliter l'analyse de données, il est préférable de rassembler l'ensemble des base de données en une.
 
-```{r}
+```{r, message = FALSE, warning = FALSE, include = FALSE}
 col_co2 = colnames(dat_co2)
 
 col_energy = colnames(dat_energy)
@@ -176,7 +180,7 @@ write.csv(dat_full, file = paste0(dat_name, ".csv"))
 
 ### Analyse #1
 
-```{r}
+```{r, echo = FALSE}
 mod1 = lm(co2 ~ gdp + population + Life.expectancy, data = dat_full, na.action=na.exclude)
 
 summary(mod1)
@@ -197,7 +201,7 @@ Avec une analyse basée sur les graphes orientés acycliques (GOA ou en anglais 
 
 ### Analyse #2
 
-```{r}
+```{r, echo = FALSE}
 dat_mod2 = dat_full %>% filter(year >= 1990)
 mod2 = lm(renewables_share_elec ~ log(gdp_per_capita), data = dat_full, na.action=na.exclude)
 summary(mod2)

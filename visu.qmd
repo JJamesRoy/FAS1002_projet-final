@@ -25,7 +25,7 @@ citation: false
 bibliography: references.bib
 ---
 
-```{r, warning = FALSE, message = FALSE}
+```{r, warning = FALSE, message = FALSE, include = FALSE}
 library(tidyverse)
 library(leaflet)
 library(gganimate)
@@ -41,7 +41,7 @@ library(showtext)
 library(htmlwidgets)
 ```
 
-```{r}
+```{r, include = FALSE, message=FALSE}
 path = path("data", "processed")
 
 file_full = path(path, list.files(path))
@@ -49,16 +49,21 @@ file_full = path(path, list.files(path))
 dat_full = read.csv(file_full)
 ```
 
-## Supression anciens graphiques
-
-```{r, warning = FALSE, message = FALSE}
+```{r, warning = FALSE, message = FALSE, include = FALSE}
 path_fig = path("R","figure.R")
 source(path_fig)
+# Supprimer les anciens graphiques, fait appel à un script
 ```
+
+## Visualisation
+
+Dans cette partie, les données seront visualisées pour mieux les analyser. Tous les graphiques sont disponibles au téléchargement. Voici cette partie : [Rappel] pour le téléchargement.
 
 ## Importation données manquantes
 
-```{r, message = FALSE, cache=TRUE}
+Il faut télécharger les données satellites de la Terre pour pouvoir créer un graphique de type chloroplèthe. Cela consiste de variables qui forment des polygones qui représentent les différents pays.
+
+```{r, message = FALSE, cache=TRUE, include = FALSE}
 URL = "https://thematicmapping.org/downloads/TM_WORLD_BORDERS_SIMPL-0.3.zip"
 
 path_map_zip = path("data", "map", "map")
@@ -76,7 +81,7 @@ map_files = list.files(path_map)
 file.remove(path(path_map, map_files[c(1,2)])) # À optimiser
 ```
 
-```{r, warning = FALSE, message=FALSE}
+```{r, warning = FALSE, message=FALSE, include = FALSE}
 path_map_read = path("data", "map")
 
 layer = file_path_sans_ext(list.files(path_map_read))
@@ -104,7 +109,7 @@ map@data = right_join(dat_map, map@data,
 
 ```
 
-```{r}
+```{r, message = FALSE, include = FALSE}
 font_add_google("Roboto Mono", "Roboto")
 showtext_auto()
 
@@ -121,7 +126,7 @@ Dans ce premier graphique, il est possible d'observer la répartition des émiss
 
 2.  Effet #2 : Les pays riches ont plus tendances à surconsommer, à utiliser des moyens de transport plus polluants et à avoir un quotidient plus intensif au niveau énergétique. Donc la corrélation devrait positive.
 
-```{r, warning = FALSE, message = FALSE}
+```{r, warning = FALSE, message = FALSE, echo = FALSE}
 breaks_qt <- classIntervals(map$co2_per_gdp, n = 9, style = "quantile")
   #Break the variable into quantiles
 
@@ -161,7 +166,7 @@ En somme, sans analyse statistique approfondie, il est difficile d'établir le s
 
 Comme deuxième graphique, la moyenne pondérée du CO2 par habitant par continent est représentée au fil des ans. Deux éléments intéressants ressortent du graphique. D'abord, on voit un rattrapage progressif de l'Asie, qui est sans doute du à la croissance économique de ces pays. De l'autre côté, l'Europe et l'Amérique améliorent leurs efficacités énergétiques de façon remarquable à partir de 1980-85.
 
-```{r, message = FALSE, warning = FALSE}
+```{r, message = FALSE, warning = FALSE, echo = FALSE}
 dat_p1 = dat_full %>% 
     group_by(continent, year) %>% 
     mutate(mean = weighted.mean(co2_per_capita, population))
@@ -188,7 +193,7 @@ animate(p1,
 
 Ensuite, le troisième graphique représente la distribution de la part d'électricité de source renouvelable dans chaque continent (moyenne pondérée par la population). Logiquement, on voit une progression quasi constante pour chacun des continents.
 
-```{r, warning = FALSE}
+```{r, warning = FALSE, echo=FALSE, message = FALSE}
 dat_p2 = dat_full %>% 
     group_by(continent, year) %>% 
     summarise(mean = 0.01*weighted.mean(renewables_share_elec, population, na.rm = TRUE))
@@ -220,7 +225,7 @@ animate(p2,
 
 Le quatrième graphique représente simplement l'évolution de l'espérance de vie par continent au fil des années. Il est possible de remarquer divers événements historiques dans les points (par exemple : dislocation de l'URSS ou encore le génocide des Tutsis au Rwanda).
 
-```{r, warning = FALSE}
+```{r, warning = FALSE, message = FALSE, echo = FALSE}
 dat_p3 = dat_full %>% drop_na(Life.expectancy) %>% filter(year >= 1980 & year <2020) %>% group_by(continent, year) %>% mutate(mean = weighted.mean(Life.expectancy, population))
 
 p3 = ggplot(dat_p3, aes(year, mean, color = as.factor(continent))) +
@@ -244,7 +249,7 @@ ggsave(filename = paste0(paste(path(figure, "p3"), today(), sep = "_"), ".png"),
 
 En dernier, l'espérance de vie et le PIB par habitant (échelle log) sont représentés par continent au fil des années. On voit une corrélation assez forte ainsi qu'une croissante constante.
 
-```{r, warning = FALSE, message = FALSE}
+```{r, warning = FALSE, message = FALSE, echo = FALSE}
 p4 = ggplot(dat_full, aes(gdp_per_capita, Life.expectancy, size = population, color = continent)) +
     geom_point() +
     scale_x_continuous(trans = "log10", labels = scales::dollar_format()) +
@@ -267,4 +272,17 @@ animate(p4,
         end_pause = 10,
         start_pause = 10,
         renderer = gifski_renderer(paste0(paste(path(figure, "p4"), today(), sep = "_"), ".gif")))
+```
+
+## Rappel
+
+L'ensemble des données traitées et non-traitées ainsi que les graphiques sont disponibles sur cette [page.](data.qmd)
+
+```{r, message = FALSE, warning = FALSE, include = FALSE}
+#Mettre les graphiques en zip
+
+bulk = path("data", "bulk_plot")
+file.remove(paste0(bulk, ".zip"))
+files2zip <- dir(path("figures"), full.names = TRUE)
+zip(zipfile = bulk, files = files2zip)
 ```

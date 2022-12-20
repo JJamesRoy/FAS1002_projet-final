@@ -34,7 +34,7 @@ Dans ce projet, on analysera des données sur le CO2 de @owidco2andothergreenhou
 Bien que plusieurs résultats ont été trouvés, cette partie va en présenter trois.
 
 1.  D'abord, que les pays occidentaux (globalement Europe et Amériques) ont bien réussi à améliorer leur efficacité énergétique (voir graphique p1)
-2.   En deuxième, le lien entre PIB par habitant et espérance de vie fort, et ce, dans l'ensemble des continents (voir graphique p4)
+2.  En deuxième, le lien entre PIB par habitant et espérance de vie fort, et ce, dans l'ensemble des continents (voir graphique p4)
 3.  En dernier, les événements historiques ont des impacts marqués sur l'espérance de vie d'une région (voir graphique p3)
 
 ## Conclusion

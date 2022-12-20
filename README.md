@@ -24,31 +24,14 @@ Ce répertoire est mon rapport en lien avec le travail final du cours [FAS1002](
 
 -   Données sur l'espérance de vie de @lifeexp
 
-## Packages utilisés :
+## Inspiration pour ce README
 
--   @tid
-
--   @leaf
-
--   @ggan
-
--   @fs
-
--   @rg
-
--   @rmap
-
--   @tools
-
--   @rcolo
-
--   @class
-
--   @country
-
--   @showtext
-
--   @html
+```mermaid
+pie
+    title Inspi
+    "Aucune" : 90
+    "Aucune mais en autre couleur" : 10
+```
 
 ## Licence
 

@@ -25,19 +25,19 @@ citation: false
 bibliography: references.bib
 ---
 
-```{r, warning = FALSE}
+```{r, warning = FALSE, include = FALSE}
 library(DT)
 library(fs)
 ```
 
-```{r}
+```{r, message = FALSE, warning = FALSE, include = FALSE}
 bulk = path("data", "bulk_data")
 file.remove(paste0(bulk, ".zip"))
 files2zip <- dir(path("data", "raw"), full.names = TRUE)
 zip(zipfile = bulk, files = files2zip)
 ```
 
-```{r}
+```{r, message = FALSE, warning = FALSE, include = FALSE}
 base = path("data","processed")
 
 base_file = path(base, list.files(base))
@@ -45,9 +45,11 @@ base_file = path(base, list.files(base))
 dat = read.csv(base_file)
 ```
 
+## Nettoyées
+
 Les données modifiées se trouvent ci-dessous :
 
-```{r, warning = FALSE}
+```{r, warning = FALSE, echo = FALSE}
 datatable(
   dat, extensions = 'Buttons', options = list(
     dom = 'Bfrtip',
@@ -56,8 +58,17 @@ datatable(
 )
 ```
 
+## Brutes
+
 Les données brutes sont disponibles ici dans un fichier compressé.
 
 ```{=html}
 <a href="/data/bulk_data.zip" download>Télécharger les données</a>
+```
+## Graphiques
+
+Les graphiques sont disponibles dans ce fichier zip.
+
+```{=html}
+<a href="/data/bulk_plot.zip" download>Télécharger les graphiques</a>
 ```

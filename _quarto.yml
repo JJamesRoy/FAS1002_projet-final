@@ -2,7 +2,7 @@ project:
   type: website
 
 website:
-  title: "Projet final de JR"
+  title: "JR"
   description: | 
     "Accueil"
 

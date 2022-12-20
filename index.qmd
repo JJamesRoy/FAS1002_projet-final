@@ -1,15 +1,23 @@
 ---
 title: "Accueil"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
+bibliography: references.bib
 ---
 
-Ce site est le fruit du projet final du cours FAS1002 donné à l'Université de Montréal. Globalement, il consiste à analyser et visualer trois bases de données.
+Ce site est le fruit du projet final du cours FAS1002 donné à l'Université de Montréal. Globalement, il consiste à analyser et visualer trois bases de données. Ce rapport analyse des données sous divers angle.
 
 Pour la suite, il suffit de se rendre sur cette page [page d'introduction.](intro.qmd)
 
+```{r, include = FALSE, message = FALSE, warning = FALSE}
+#Easter egg
+library(fs)
+x = path("R", "easteregg.R")
+source(x)
+```
+
 ## Comment coder en 2022
 
-```{r pie, fig.subcap= 'À risque de changer rapidement', tidy=FALSE}
+```{r pie, fig.subcap= 'À risque de changer rapidement', tidy=FALSE, echo = FALSE}
 par(mar = c(0, 1, 0, 1))
 pie(
   c(280, 60, 20),
@@ -22,3 +30,33 @@ pie(
 ## Remerciements {.appendix}
 
 J'aimerais remercier Samuel Guay pour son cours et sa disponibilité.
+
+::: callout-important
+Bizarrement, les citations ne marchent pas toujours. Je n'ai pas réussi à comprendre pourquoi. Il semble que des fois il détecte le reference.bib et des fois non...
+:::
+
+J'aimerais aussi remercier ces personnes pour leurs packages *:*
+
+-   @tid
+
+-   @leaf
+
+-   @ggan
+
+-   @fs
+
+-   @rg
+
+-   @rmap
+
+-   @tools
+
+-   @rcolo
+
+-   @class
+
+-   @country
+
+-   @showtext
+
+-   @html
