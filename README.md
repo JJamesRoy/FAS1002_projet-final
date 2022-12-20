@@ -29,7 +29,7 @@ pie
     "Aucune" : 90
     "Aucune mais en autre couleur" : 10
 ```
-**C'est du markdown, mais pourquoi mon piechart marche pas cr*****
+**Le piechart marche mais des fois non ciboulo**
 
 ## Licence
 
