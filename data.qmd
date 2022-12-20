@@ -32,7 +32,13 @@ library(fs)
 
 ```{r, message = FALSE, warning = FALSE, include = FALSE}
 bulk = path("data", "bulk_data")
-file.remove(paste0(bulk, ".zip"))
+
+if (file.exists(paste0(bulk, ".zip"))){
+  file.remove(paste0(bulk, ".zip"))
+} else {
+  print("Fichier non-existant")
+}
+
 files2zip <- dir(path("data", "raw"), full.names = TRUE)
 zip(zipfile = bulk, files = files2zip)
 ```

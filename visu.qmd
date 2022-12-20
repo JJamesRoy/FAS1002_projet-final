@@ -280,9 +280,14 @@ L'ensemble des données traitées et non-traitées ainsi que les graphiques sont
 
 ```{r, message = FALSE, warning = FALSE, include = FALSE}
 #Mettre les graphiques en zip
-
 bulk = path("data", "bulk_plot")
-file.remove(paste0(bulk, ".zip"))
+
+if (!file.exists(paste0(bulk, ".zip"))){
+  print("Fichier non-existant")
+} else {
+  file.remove(paste0(bulk, ".zip"))
+}
+
 files2zip <- dir(path("figures"), full.names = TRUE)
 zip(zipfile = bulk, files = files2zip)
 ```
