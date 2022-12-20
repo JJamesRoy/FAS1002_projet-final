@@ -1,6 +1,3 @@
----
-bibliography: references.bib
----
 
 # FAS1002_JamesRoy
 
@@ -32,6 +29,7 @@ pie
     "Aucune" : 90
     "Aucune mais en autre couleur" : 10
 ```
+**Le piechart marche mais des fois non ciboulo**
 
 ## Licence
 
