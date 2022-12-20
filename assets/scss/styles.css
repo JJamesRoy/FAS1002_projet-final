@@ -22,7 +22,7 @@ $navbar-bg: #E9ECF5;
 au besoin */
 
 .navbar, .nav-footer {
-    background: linear-gradient(-45deg, #2b303a, #eee5e9, #7c7c7c);
+    background: linear-gradient(-45deg, #8898b8, #eee5e9, #c4f2da);
     background-size: 400% 400%;
     animation: gradient 100s ease infinite;
 }
