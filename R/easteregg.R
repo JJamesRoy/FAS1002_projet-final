@@ -4,7 +4,7 @@ path = path("assets","img")
 
 img = path(path, list.files(path))
 
-x = sample(1:2,1)
+x = sample(1:2,1) # Une chance sur deux de changer de logo (logo fait avec Midjourney et Dall-e)
 
 img_name = path(path, "logo.png")
 
@@ -17,5 +17,3 @@ if (x == 1){
     file.rename(img[1], paste0(dummy, sample(1:1000, 1), ".png"))
     file.rename(img[2], img_name)
 }
-
-# stringi, stro-rand

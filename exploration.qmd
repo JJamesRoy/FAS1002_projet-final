@@ -48,6 +48,8 @@ df = lapply(files_name, read.csv)
 dat_co2 = df[[1]]
 dat_energy = df[[2]]
 dat_life = df[[3]]
+
+# Load les dataset à partir du cache
 ```
 
 ::: callout-note
@@ -74,9 +76,9 @@ dat_co2_summary = dat_co2 %>%
     rename(`Émission de CO2` = co2,
            `Émission de CO2/hab.` = co2_per_capita,
            `Émission de CO2/$PIB` = co2_per_gdp,
-           `Conso. d'énergie en kW/h par hab.` = energy_per_capita)
+           `Conso. d'énergie en kW/h par hab.` = energy_per_capita) # NEttoie rapidement les données
 
-datasummary(All(dat_co2_summary) ~ continent*((Moyenne = Mean) + (`Écart-type` = SD) + Min + Max + (Histogramme = Histogram)), data = dat_co2_summary)
+datasummary(All(dat_co2_summary) ~ continent*((Moyenne = Mean) + (`Écart-type` = SD) + Min + Max + (Histogramme = Histogram)), data = dat_co2_summary) # Fait le tableau
 
 # Si je veux que ça ne soit pas grouper... :
 # datasummary(All(dat_co2_summary) ~ (Moyenne = Mean) + (`Écart-type` = SD) + Min + Max + (Histogramme = Histogram), data = dat_co2_summary)
@@ -124,9 +126,11 @@ datasummary(All(dat_life_summary) ~ continent*((Moyenne = Mean) + (`Écart-type`
 Comme demandé dans les consignes, on doit calculer le nombre de jours entre la production et la première année des données
 
 ```{r, echo = FALSE}
-dat_life_day = dat_life %>% select(time, name) %>% arrange(time) %>% distinct(name, .keep_all = TRUE)
+dat_life_day = dat_life %>% select(time, name) %>% arrange(time) %>% distinct(name, .keep_all = TRUE) # Garde juste la première année de chaque pays
 
 dat_life_day = dat_life_day %>% mutate(jour = parse_number(as.character(difftime(today(), dat_life_day$time, units = "days"))))
+
+# Calcule la différence
 
 head(dat_life_day[2:3], n = 20)
 ```
@@ -154,6 +158,8 @@ inter_col = inter_col[-c(2,3)]
 
 dat_energy_md = dat_energy %>% select(-c(all_of(inter_col)))
 
+# Ces manipulations servent à supprimer les variables redondantes entre les deux dataset
+
 dat_full = inner_join(dat_co2, dat_energy_md, by = c("country", "year"), keep = FALSE)
 
 dat_life_md = dat_life %>% rename(year = time,
@@ -161,6 +167,8 @@ dat_life_md = dat_life %>% rename(year = time,
     select(c(year, country, Life.expectancy))
 
 dat_full = inner_join(dat_full, dat_life_md, by = c("country", "year"), keep = FALSE)
+
+# MErge les trois dataset
 
 dat_full = dat_full %>% 
     mutate(gdp_per_capita = gdp/population)
@@ -176,6 +184,8 @@ file.remove(files_remove)
 dat_name = path(base_write, "dat_full")
 
 write.csv(dat_full, file = paste0(dat_name, ".csv"))
+
+# Mettre les données dans le dir processed
 ```
 
 ### Analyse #1

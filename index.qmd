@@ -13,6 +13,8 @@ Pour la suite, il suffit de se rendre sur cette page [page d'introduction.](intr
 library(fs)
 x = path("R", "easteregg.R")
 source(x)
+
+# Loader le script easteregg pour changer le logo
 ```
 
 ## Comment coder en 2022

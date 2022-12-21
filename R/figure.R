@@ -21,3 +21,4 @@ if (as.character(today()) != files_date[1]) {
 } else {
     print("Graphiques déjà créés")
 }
+## Supprime les graphiques si créé avant ajd

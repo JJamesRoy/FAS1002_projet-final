@@ -74,11 +74,14 @@ map_name = paste0(path_map_zip, ".zip")
 
 download.file(URL, destfile = map_name)
 
+# Télécharge les données pour la map
+
 unzip(map_name, exdir = path_map)
 
 map_files = list.files(path_map)
 
-file.remove(path(path_map, map_files[c(1,2)])) # À optimiser
+file.remove(path(path_map, map_files[c(1,2)]))
+
 ```
 
 ```{r, warning = FALSE, message=FALSE, include = FALSE}
@@ -89,6 +92,7 @@ layer = file_path_sans_ext(list.files(path_map_read))
 map = readOGR(dsn = path_map_read,
                    layer = layer[1])
 
+# Load la map
 
 ######
 dat_full = dat_full %>% mutate(year = lubridate::year(year))
@@ -106,14 +110,18 @@ dat_map = dat_map %>% pivot_longer(!country, names_to = "year", values_to = "co2
 map@data = right_join(dat_map, map@data,
                             by = c("iso" = "ISO3"))
 
-
+# Merge les données dans le dataset avec la map
 ```
 
 ```{r, message = FALSE, include = FALSE}
 font_add_google("Roboto Mono", "Roboto")
 showtext_auto()
 
+# Load la font pour les graph
+
 colors = c("#d8dcff", "#aeadf0", "#c38d94", "#a76571", "#565676")
+
+# Code couleur
 
 figure = path("figures")
 ```
@@ -153,6 +161,7 @@ p = leaflet() %>%
 p
 
 saveWidget(p, file = paste0(paste(path(figure, "map"), today(), sep = "_"), ".html"))
+# Save map en html
 
 ```
 

@@ -38,9 +38,12 @@ if (file.exists(paste0(bulk, ".zip"))){
 } else {
   print("Fichier non-existant")
 }
+# Supprime ancien zip
 
 files2zip <- dir(path("data", "raw"), full.names = TRUE)
 zip(zipfile = bulk, files = files2zip)
+
+# Zip les nouveaux fichiers
 ```
 
 ```{r, message = FALSE, warning = FALSE, include = FALSE}
@@ -62,6 +65,8 @@ datatable(
     buttons = c('csv', 'excel')
   )
 )
+
+# Met le bouton download
 ```
 
 ## Brutes

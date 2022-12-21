@@ -59,6 +59,8 @@ df = lapply(files_name, read.csv)
 dat_co2 = df[[1]]
 dat_energy = df[[2]]
 dat_life = df[[3]]
+
+# Loader les données brutes
 ```
 
 ```{r co2, warning = FALSE, include = FALSE}
@@ -67,6 +69,8 @@ dat_co2 = dat_co2 %>% drop_na(co2) %>%
     mutate(continent = recode(continent, `Africa` = "Afrique", `Americas` = "Amériques", `Asia` = "Asie", `Oceania` = "Océanie"))
 
 dat_co2$year = ymd(dat_co2$year, truncated = 2L)
+
+# Rapide cleanup pour ajuster les variables
 ```
 
 ```{r energy, warning = FALSE, include = FALSE}
@@ -99,6 +103,8 @@ myList <- list(dat_co2 = dat_co2,
                dat_life = dat_life)
 
 mapply(write.csv, myList, file=paste0(base_write,"/",names(myList), '.csv'))
+
+# Mettre les fichiers nettoyés dans le cache
 ```
 
 ## Téléchargement des données

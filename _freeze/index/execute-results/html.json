@@ -1,5 +1,5 @@
 {
-  "hash": "20bf1cb4e62ab669d688bfeb3dc47ca6",
+  "hash": "eac6b7ec4d1ba99b9c0a94908805a61b",
   "result": {
     "markdown": "---\ntitle: \"Accueil\"\ndate: \"20 December, 2022\"\nbibliography: references.bib\n---\n\n\nCe site est le fruit du projet final du cours FAS1002 donné à l'Université de Montréal. Globalement, il consiste à analyser et visualer trois bases de données. Ce rapport analyse des données sous divers angle.\n\nPour la suite, il suffit de se rendre sur cette page [page d'introduction.](intro.qmd)\n\n\n\n\n\n## Comment coder en 2022\n\n\n::: {.cell}\n::: {.cell-output-display}\n![À risque de changer rapidement](index_files/figure-html/pie-1.png){width=672}\n:::\n:::\n\n\n## Remerciements {.appendix}\n\nJ'aimerais remercier Samuel Guay pour son cours et sa disponibilité.\n\n::: callout-important\nBizarrement, les citations ne marchent pas toujours. Je n'ai pas réussi à comprendre pourquoi. Il semble que des fois il détecte le reference.bib et des fois non...\n:::\n\nJ'aimerais aussi remercier ces personnes pour leurs packages *:*\n\n-   @tid\n\n-   @leaf\n\n-   @ggan\n\n-   @fs\n\n-   @rg\n\n-   @rmap\n\n-   @tools\n\n-   @rcolo\n\n-   @class\n\n-   @country\n\n-   @showtext\n\n-   @html\n",
     "supporting": [
